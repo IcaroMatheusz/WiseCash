@@ -1,6 +1,27 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
 
-function Login() {
+function Login({ setIsAuthenticated }) {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const navigate = useNavigate();
+
+  function handleSubmit(e) {
+    e.preventDefault(); //cancela o carregamento da página, porque no HTML antigo
+    //o formulario recarrega a página toda vez q é apertado um botão
+    //preventdefault previni o comportamento padrão, bem intuitivo
+
+    if (username === "" || password === "") {
+      setError("Preencha todos os campos");
+      return;
+    }
+
+    setIsAuthenticated(true);
+    navigate("/dashboard");
+  }
+
   return (
     <>
       <div className="min-h-screen bg-slate-800 font-sans">
@@ -18,7 +39,9 @@ function Login() {
               Login
             </h2>
 
-            <form action="submit" className="flex flex-col gap-4">
+            <p className="text-red-500 text-sm">{error}</p>
+
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
               <label
                 htmlFor="username"
                 className="mb-1 block text-sm font-medium text-slate-700"
@@ -26,6 +49,10 @@ function Login() {
                 Username:
               </label>
               <input
+                value={username}
+                onChange={(e) => {
+                  setUsername(e.target.value);
+                  setError("");}}
                 placeholder="Digite seu nome de usuário"
                 type="text"
                 id="username"
@@ -39,15 +66,20 @@ function Login() {
                 Password:
               </label>
               <input
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setError("");
+                }}
                 placeholder="Digite sua senha"
                 type="password"
                 id="password"
                 className="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none focus:border-blue-500"
               />
-              
-              <a href="" className=" text-slate-700">
-                <Link to="/register">Não possui uma conta?</Link>
-              </a>
+
+              <Link to="/register" className="text-slate-700">
+                Não possui uma conta?
+              </Link>
 
               <button className="mt-4 rounded-lg bg-slate-800 py-2 font-semibold text-white transition hover:bg-slate-700">
                 Sign in
@@ -60,4 +92,4 @@ function Login() {
   );
 }
 
-export default Login
+export default Login;
