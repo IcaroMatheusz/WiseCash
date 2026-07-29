@@ -14,15 +14,20 @@ function Register() {
   async function handleSubmit(e) {
     e.preventDefault();
 
-    if (username === "" || (email === "") | (password === "")) {
+    if (username === "" || (email === "") || (password === "")) {
       setError("Preencha todos os campos");
       return;
     }
 
     const { data, error } = await supabase.auth.signUp({ //usando a função de registro do Supabase
-      username: username, 
       email: email,
       password: password,
+      options: {
+        data: {
+          username: username,
+          full_name: username, //esse campo full_name vai adicionar o nome no Display Name do Supabase
+        }
+      }
     });
 
     if (error) {
