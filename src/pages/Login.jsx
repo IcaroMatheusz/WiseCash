@@ -1,27 +1,39 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-
+import { supabase } from "../lib/supabase"
 
 function Login({ setIsAuthenticated }) {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault(); //cancela o carregamento da página, porque no HTML antigo
     //o formulario recarrega a página toda vez q é apertado um botão
     //preventdefault previni o comportamento padrão, bem intuitivo
 
-    if (username === "" || password === "") {
+    if (email === "" || password === "") { //validacao para verificar se os campos estao vazios
       setError("Preencha todos os campos"); 
+      return
+    }
+
+    const { data, error } = await supabase.auth.signInWithPassword({ //constante para esperar a resposta do supabase
+      email: email, //para utilizar o email, ele está pegando a variável email
+      password: password, //para utilizar a senha, ele está pegando a variável password
+    })
+
+    if (error) {
+      setError("Usuário ou senha inválidos")
       return
     }
 
     localStorage.setItem("isAuthenticated","true")
     setIsAuthenticated(true);
     navigate("/dashboard");
+
+    console.log(data.user.email)
   }
 
   return (
@@ -41,23 +53,23 @@ function Login({ setIsAuthenticated }) {
               Login
             </h2>
 
-            <p className="text-red-500 text-sm">{error}</p>
+            <p className="text-red-500 text-sm text-center">{error}</p>
 
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
               <label
-                htmlFor="username"
+                htmlFor="email"
                 className="mb-1 block text-sm font-medium text-slate-700"
               >
-                Username:
+                Email:
               </label>
               <input
-                value={username}
+                value={email}
                 onChange={(e) => {
-                  setUsername(e.target.value);
+                  setEmail(e.target.value);
                   setError("");}}
-                placeholder="Digite seu nome de usuário"
+                placeholder="Digite seu email"
                 type="text"
-                id="username"
+                id="email"
                 className="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none focus:border-blue-500"
               />
 
