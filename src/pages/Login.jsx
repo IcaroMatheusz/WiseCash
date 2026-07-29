@@ -31,9 +31,9 @@ function Login({ setIsAuthenticated }) {
 
     localStorage.setItem("isAuthenticated","true")
     setIsAuthenticated(true);
-    navigate("/dashboard");
 
     console.log(data.user.email)
+    navigate("/dashboard");
   }
 
   return (

@@ -1,11 +1,43 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { supabase } from "../lib/supabase";
 
 function Register() {
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [message,setMessage] = useState("")
 
-  const [username, setUsername] = useState("")
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
+  const navigate = useNavigate();
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+
+    if (username === "" || (email === "") | (password === "")) {
+      setError("Preencha todos os campos");
+      return;
+    }
+
+    const { data, error } = await supabase.auth.signUp({ //usando a função de registro do Supabase
+      username: username, 
+      email: email,
+      password: password,
+    });
+
+    if (error) {
+      setError("Ocorreu um problema no registro");
+      return;
+    } else if (data?.user) {
+      setEmail("")
+      setUsername("")
+      setPassword("")
+      setMessage("Registro realizado com sucesso")
+    }
+
+    console.log(data.user.email);
+    navigate("/");
+  }
 
   return (
     <>
@@ -24,7 +56,11 @@ function Register() {
               Register
             </h2>
 
-            <form action="submit" className="flex flex-col gap-4">
+            <p className="text-red-500 text-sm text-center">{error}</p>
+
+            <p className="text-green-500 text-sm text-center">{message}</p>
+
+            <form action="submit" onSubmit={handleSubmit} className="flex flex-col gap-4">
               <label
                 htmlFor="username"
                 className="mb-1 block text-sm font-medium text-slate-700"
@@ -33,7 +69,10 @@ function Register() {
               </label>
               <input
                 value={username}
-                onChange={(e) => setUsername(e.target.value)} //salvando o valor do usuario dentro da variavel username
+                onChange={(e) => {
+                  setUsername(e.target.value); //salvando o valor do usuario dentro da variavel username
+                  setError("");
+                }}
                 placeholder="Create a username"
                 type="text"
                 id="username"
@@ -48,7 +87,10 @@ function Register() {
               </label>
               <input
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value); //salvando o valor do email dentro da variavel email
+                  setError("");
+                }}
                 type="email"
                 id="email"
                 placeholder="johndoe@gmail.com"
@@ -63,7 +105,10 @@ function Register() {
               </label>
               <input
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => {
+                  setPassword(e.target.value); //salvando o valor do password dentro da variavel password
+                  setError("");
+                }}
                 placeholder="Create a password"
                 type="password"
                 id="password"
@@ -75,7 +120,7 @@ function Register() {
               </Link>
 
               <button className="mt-4 rounded-lg bg-slate-800 py-2 font-semibold text-white transition hover:bg-slate-700">
-                Sign in
+                Sign up
               </button>
             </form>
           </div>
