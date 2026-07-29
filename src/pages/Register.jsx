@@ -65,7 +65,7 @@ function Register() {
 
             <p className="text-green-500 text-sm text-center">{message}</p>
 
-            <form action="submit" onSubmit={handleSubmit} className="flex flex-col gap-4">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
               <label
                 htmlFor="username"
                 className="mb-1 block text-sm font-medium text-slate-700"
