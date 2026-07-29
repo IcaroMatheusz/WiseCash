@@ -1,7 +1,7 @@
 import { useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-function Dashboard({ isAuthenticated}) {
+function Dashboard({ setIsAuthenticated,isAuthenticated}) {
 
   const navigate = useNavigate()
 
@@ -11,15 +11,21 @@ function Dashboard({ isAuthenticated}) {
     }
   }, [isAuthenticated])
 
+  function handleLogout() {
+    localStorage.removeItem("isAuthenticated")
+    setIsAuthenticated(false)
+    navigate("/")
+  }
+
   return (
     <>
       <div className="min-h-screen bg-slate-900">
         <main className="flex justify-center items-center">
           <h2 className="text-white text-2xl m-4">You're logged in</h2>
 
-          <Link to="/" className="p-12 bg-slate-400 text-slate-700">
+          <button className="p-12px bg-slate-300 font-sans font-bold" onClick={handleLogout}>
             Logout
-          </Link>
+          </button>
         </main>
       </div>
     </>

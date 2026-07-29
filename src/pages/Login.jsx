@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
+
 function Login({ setIsAuthenticated }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -14,10 +15,11 @@ function Login({ setIsAuthenticated }) {
     //preventdefault previni o comportamento padrão, bem intuitivo
 
     if (username === "" || password === "") {
-      setError("Preencha todos os campos");
-      return;
+      setError("Preencha todos os campos"); 
+      return
     }
 
+    localStorage.setItem("isAuthenticated","true")
     setIsAuthenticated(true);
     navigate("/dashboard");
   }

@@ -8,14 +8,16 @@ import { useState } from "react";
 
 function App() {
 
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    return localStorage.getItem("isAuthenticated") === "true"
+  })
 
   return (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Login setIsAuthenticated={setIsAuthenticated}/>}/>
           <Route path="/register" element={<Register />}/>
-          <Route path="/dashboard" element={<Dashboard isAuthenticated={isAuthenticated}/>}/>
+          <Route path="/dashboard" element={<Dashboard isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated}/>}/>
         </Routes>
       </BrowserRouter>
   );
