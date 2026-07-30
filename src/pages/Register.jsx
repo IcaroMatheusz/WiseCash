@@ -30,14 +30,28 @@ function Register() {
       }
     });
 
-    if (error) {
+    if (error) {  //caso ocorra algum erro, vai rodar essa funcao e interromper o fluxo
+      
       setError("Ocorreu um problema no registro");
       return;
-    } else if (data?.user) {
+
+    } else if (data?.user) {  //caso nao ocorra, ele limpa os campos e exibe uma mensagem de sucesso
+      
+      const { error: profileError } = await supabase.from("profiles").insert({ //antes de confirmarmos o login, vamos tentar adicioná-lo na tabela profiles
+        id: data.user.id, //botando o id da auth do supabase dentro do campo id da tabela
+        name: username //botando o nome dentro do username dentro do campo name
+      });
+
+      if (profileError) { //caso tenha ocorrido algum erro ao inserir os dados na tabela profile
+        setError("Conta criada, mas houve um erro ao salvar o perfil")
+        return;
+      }
+
       setEmail("")
       setUsername("")
       setPassword("")
       setMessage("Registro realizado com sucesso")
+
     }
 
     console.log(data.user.email);
