@@ -9,6 +9,8 @@ function Dashboard({ setIsAuthenticated, isAuthenticated }) {
   const [username, setUsername] = useState("")
   const [renda, setRenda] = useState()
   const [error, setError] = useState("")
+  const [message, setMessage] = useState("")
+  const [userId, setUserId] = useState()
 
   async function handleLogout() {
     await supabase.auth.signOut();
@@ -25,7 +27,7 @@ function Dashboard({ setIsAuthenticated, isAuthenticated }) {
       return;
     }
     setUsername(data.session.user.user_metadata?.username)
-
+    setUserId(data.session.user.id)
   }
 
 
@@ -33,14 +35,25 @@ function Dashboard({ setIsAuthenticated, isAuthenticated }) {
     e.preventDefault()
 
     const { error: profileError } = await supabase.from("profiles").update({
-      income: renda,
-    })
+      income: renda
+    }) //atualizando o campo de renda
+      .eq("id", userId) //onde o id é igual ao userId
+
+
 
     if (profileError) {
       setError("Erro ao atualizar o saldo")
       return
-    } 
-  } 
+    }
+
+    setMessage("Renda atualizada")
+
+    const { data } = await supabase
+      .from("profiles")
+      .update({ income: renda })
+      .eq("id", userId)
+      .select()
+  }
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -62,9 +75,9 @@ function Dashboard({ setIsAuthenticated, isAuthenticated }) {
           {username && <h3 className="text-white text-2xl m-4 font-bold">Bem vindo, {username}</h3>}
 
           <section className="flex justify-center items-center">
-            <form 
-            onSubmit={adicionarRenda}
-            className="w-full max-w-sm bg-white p-8 rounded-2xl shadow-md flex flex-col gap-4 border border-gray-100"
+            <form
+              onSubmit={adicionarRenda}
+              className="w-full max-w-sm bg-white p-8 rounded-2xl shadow-md flex flex-col gap-4 border border-gray-100"
             >
 
               <div className="flex flex-col gap-1.5">
@@ -84,13 +97,13 @@ function Dashboard({ setIsAuthenticated, isAuthenticated }) {
                   className="w-full px-4 py-2.5 text-gray-800 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                 />
 
-                
-              </div>
-                
 
-              <p> Renda: {renda} </p>
-              <button 
-              type="submit" className="w-full mt-2 bg-slate-600 hover:bg-slate-700 text-white font-medium py-2.5 px-4 rounded-lg transition-colors shadow-sm">
+              </div>
+
+
+              <p className="text-green-500"> {message} </p>
+              <button
+                type="submit" className="w-full mt-2 bg-slate-600 hover:bg-slate-700 text-white font-medium py-2.5 px-4 rounded-lg transition-colors shadow-sm">
                 Adicionar Renda Mensal
               </button>
 
