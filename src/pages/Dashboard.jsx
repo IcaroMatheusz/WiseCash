@@ -10,9 +10,8 @@ function Dashboard({ setIsAuthenticated, isAuthenticated }) {
   const [renda, setRenda] = useState()
   const [error, setError] = useState("")
   const [message, setMessage] = useState("")
-  const [userId, setUserId] = useState()
 
-  async function handleLogout() {
+  async function handleLogout() { //função para lidar com o logout
     await supabase.auth.signOut();
     localStorage.removeItem("isAuthenticated")
     setIsAuthenticated(false)
@@ -20,26 +19,27 @@ function Dashboard({ setIsAuthenticated, isAuthenticated }) {
   }
 
   async function getUser() {
-    const { data, error } = await supabase.auth.getSession()
+
+    const { data, error } = await supabase.auth.getSession() //guardando os dados de sessão
 
     if (error) {
       setError("Erro ao exibir usuário")
       return;
     }
-    setUsername(data.session.user.user_metadata?.username)
-    setUserId(data.session.user.id)
-  }
 
+    setUsername(data.session.user.user_metadata?.username) //setando o username para ser o mesmo do objeto na api
+  }
 
   async function adicionarRenda(e) {
     e.preventDefault()
 
-    const { error: profileError } = await supabase.from("profiles").update({
+    const { data: sessionData } = await supabase.auth.getSession() //pegando os dados de sessão
+    const id = sessionData.session.user.id //pegando o id de usuario da sessão
+
+    const { error: profileError } = await supabase.from("profiles").update({ //atualizando o campo de renda
       income: renda
-    }) //atualizando o campo de renda
-      .eq("id", userId) //onde o id é igual ao userId
-
-
+    }) 
+      .eq("id", id) //trocando pro id certo
 
     if (profileError) {
       setError("Erro ao atualizar o saldo")
@@ -47,20 +47,16 @@ function Dashboard({ setIsAuthenticated, isAuthenticated }) {
     }
 
     setMessage("Renda atualizada")
-
-    const { data } = await supabase
-      .from("profiles")
-      .update({ income: renda })
-      .eq("id", userId)
-      .select()
   }
 
   useEffect(() => {
     if (!isAuthenticated) {
       navigate("/")
     } else {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       getUser();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated])
 
   return (

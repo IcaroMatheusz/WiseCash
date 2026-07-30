@@ -19,6 +19,7 @@ function Login({ setIsAuthenticated }) {
       return
     }
 
+    // eslint-disable-next-line no-unused-vars
     const { data, error } = await supabase.auth.signInWithPassword({ //constante para esperar a resposta do supabase
       email: email, //para utilizar o email, ele está pegando a variável email
       password: password, //para utilizar a senha, ele está pegando a variável password
