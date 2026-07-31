@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { supabase } from "../lib/supabase";
+import Header from "../components/Header";
 
 function Register() {
   const [username, setUsername] = useState("");
@@ -61,13 +62,7 @@ function Register() {
   return (
     <>
       <div className="min-h-screen bg-slate-800 font-sans">
-        <header className="py-10 text-center">
-          <h1 className="text-5xl font-bold text-white">Finance Management</h1>
-
-          <p className="mt-3 text-xl text-slate-300">
-            Helping you to use optimize your money!
-          </p>
-        </header>
+       <Header />
 
         <main className="flex justify-center items-center">
           <div className="w-full max-w-sm rounded-xl bg-white p-8 shadow-lg mb-10">
