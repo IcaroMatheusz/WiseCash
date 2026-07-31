@@ -80,9 +80,9 @@ function Dashboard({ setIsAuthenticated, isAuthenticated }) {
     <>
       <div className="min-h-screen bg-slate-900">
         <header className="p-4 flex justify-between">
-          {/* <button className="text-white" onClick={handleLogout}>
+          <button className="text-white" onClick={handleLogout}>
             <LogOutIcon size={30}/>
-          </button> */}
+          </button>
 
           <Link to="#" className="text-white justify-end">
             <CircleUserIcon size={40} />
