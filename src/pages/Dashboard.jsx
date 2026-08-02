@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabase";
+import { Link } from "react-router-dom";
+import { CircleUserIcon, LogOutIcon } from "lucide-react";
 
 function Dashboard({ setIsAuthenticated, isAuthenticated }) {
   const navigate = useNavigate();
@@ -77,11 +79,17 @@ function Dashboard({ setIsAuthenticated, isAuthenticated }) {
   return (
     <>
       <div className="min-h-screen bg-slate-900">
+        <header className="p-4 flex justify-between">
+          <button className="text-white" onClick={handleLogout}>
+            <LogOutIcon size={30}/>
+          </button>
+
+          <Link to="#" className="text-white justify-end">
+            <CircleUserIcon size={40} />
+          </Link>
+        </header>
+
         <main className="flex justify-center items-center flex-col">
-          <h2 className="text-white text-2xl m-4">You're logged in</h2>
-
-          <p className="text-red-500 text-2xl m-4 font-bold">{error}</p>
-
           <h3 className="text-white text-2xl m-4 font-bold">
             Bem vindo, {username}
           </h3>
@@ -92,6 +100,8 @@ function Dashboard({ setIsAuthenticated, isAuthenticated }) {
               className="w-full max-w-sm bg-white p-8 rounded-2xl shadow-md flex items-center flex-col gap-4 border border-gray-100"
             >
               <div className="flex flex-col gap-1.5">
+                <p className="text-red-500 text-2xl font-bold">{error}</p>
+
                 <label
                   htmlFor="income"
                   className="text-sm font-semibold text-gray-700"
@@ -120,19 +130,12 @@ function Dashboard({ setIsAuthenticated, isAuthenticated }) {
               <p className="text-green-500"> {message} </p>
               <button
                 type="submit"
-                className="w-full mt-2 bg-slate-600 hover:bg-slate-700 text-white font-medium py-2.5 px-4 rounded-lg transition-colors shadow-sm"
+                className="w-full bg-slate-600 hover:bg-slate-700 text-white font-medium py-2.5 px-4 rounded-lg transition-colors shadow-sm"
               >
                 Adicionar Renda Mensal
               </button>
             </form>
           </section>
-
-          <button
-            className="p-5 rounded-xl text-2xl bg-slate-700 hover:bg-slate-800 transition-colors font-sans font-bold mt-5 text-white"
-            onClick={handleLogout}
-          >
-            Logout
-          </button>
         </main>
       </div>
     </>
