@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
-import { Link } from "react-router-dom";
-import { Menu, CircleUserIcon} from "lucide-react";
-import SideBar  from '../components/SideBar'
+import HeaderBar from "../components/HeaderBar";
 
 function Dashboard() {
   const [username, setUsername] = useState("");
@@ -10,9 +8,6 @@ function Dashboard() {
   const [RendaSalva, setRendaSalva] = useState(null);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
-  
-
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   
   async function getUser() {
     const { data, error } = await supabase.auth.getSession(); //guardando os dados de sessão
@@ -67,29 +62,8 @@ function Dashboard() {
   return (
     <>
       <div className="min-h-screen bg-slate-900">
-        <header className="p-4 flex justify-between">
-
-          
-{/*           <button className="text-white" onClick={handleLogout}>
-            <LogOutIcon size={30}/>
-          </button> */}
-
-        <button
-          onClick={() => setIsSidebarOpen(true)}
-          className="text-white"
-        >
-          <Menu size={30}/>
-        </button>
-
-        <SideBar
-          isOpen={isSidebarOpen}
-          onClose={() => setIsSidebarOpen(false)}
-        />
-
-          <Link to="#" className="text-white justify-end">
-            <CircleUserIcon size={40} />
-          </Link>
-        </header>
+        
+        <HeaderBar />
 
         <main className="flex justify-center items-center flex-col">
           <h3 className="text-white text-2xl m-4 font-bold">
