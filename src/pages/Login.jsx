@@ -1,9 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { supabase } from "../lib/supabase";
+import { useAuth } from "../context/useAuth"
 import AuthCard from "../components/AuthCard";
 
-function Login({ setIsAuthenticated }) {
+function Login() {
+
+  const { login } = useAuth();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -18,18 +21,13 @@ function Login({ setIsAuthenticated }) {
       return;
     }
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    const result = await login(email, password)
 
-    if (error) {
-      setError("Invalid email or password");
+    if (!result) {
+      setError(result.message);
       return;
     }
 
-    localStorage.setItem("isAuthenticated", "true");
-    setIsAuthenticated(true);
     navigate("/dashboard");
   }
 

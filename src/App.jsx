@@ -4,22 +4,21 @@ import "./App.css";
 import Login from "./pages/Login";
 import Register from "./pages/Register"
 import Dashboard from "./pages/Dashboard";
-import { useState } from "react";
+import { AuthProvider } from "./context/AuthContext";
 
 function App() {
 
-  const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    return localStorage.getItem("isAuthenticated") === "true"
-  })
 
   return (
+    <AuthProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Login setIsAuthenticated={setIsAuthenticated}/>}/>
+          <Route path="/" element={<Login /> }/>
           <Route path="/register" element={<Register />}/>
-          <Route path="/dashboard" element={<Dashboard isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated}/>}/>
+          <Route path="/dashboard" element={<Dashboard />}/>
         </Routes>
       </BrowserRouter>
+    </AuthProvider>
   );
 }
 

@@ -1,7 +1,7 @@
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { supabase } from "../lib/supabase";
 import AuthCard from "../components/AuthCard";
+import { useAuth } from "../context/useAuth";
+import { useNavigate } from "react-router-dom";
 
 function Register() {
   const [username, setUsername] = useState("");
@@ -10,50 +10,31 @@ function Register() {
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
 
-  const navigate = useNavigate();
+  const { register } = useAuth()
+  const navigate = useNavigate()
 
   async function handleSubmit(e) {
     e.preventDefault();
 
     if (username === "" || email === "" || password === "") {
-      setError("Fill in all fields");
+      setError("Preencha todos os campos");
       return;
     }
 
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          username,
-          full_name: username,
-        },
-      },
-    });
+    const result = await register(email, password, username)
 
-    if (error) {
-      setError("An error occurred during registration");
+    console.log(result);
+
+    if (!result) {
+      setError(result.message);
       return;
     }
-
-    if (data?.user) {
-      const { error: profileError } = await supabase.from("profiles").insert({
-        id: data.user.id,
-        name: username,
-      });
-
-      if (profileError) {
-        setError("Account created, but there was an error saving the profile");
-        return;
-      }
 
       setEmail("");
       setUsername("");
       setPassword("");
       setMessage("Registration successful");
-    }
-
-    navigate("/");
+      navigate("/")
   }
 
   return (

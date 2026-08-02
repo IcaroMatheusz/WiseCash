@@ -1,26 +1,16 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 import { Link } from "react-router-dom";
-import { Menu, CircleUserIcon/* , LogOutIcon */ } from "lucide-react";
+import { Menu, CircleUserIcon} from "lucide-react";
 import SideBar  from '../components/SideBar'
 
-function Dashboard({ /* setIsAuthenticated, */ isAuthenticated }) {
-  const navigate = useNavigate();
-
+function Dashboard() {
   const [username, setUsername] = useState("");
   const [renda, setRenda] = useState();
   const [RendaSalva, setRendaSalva] = useState(null);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   
-/*   async function handleLogout() {
-    //função para lidar com o logout
-    await supabase.auth.signOut();
-    localStorage.removeItem("isAuthenticated");
-    setIsAuthenticated(false);
-    navigate("/");
-  } */
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   
@@ -70,14 +60,9 @@ function Dashboard({ /* setIsAuthenticated, */ isAuthenticated }) {
   }
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      navigate("/");
-    } else {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       getUser();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAuthenticated]);
+    },[]) 
 
   return (
     <>

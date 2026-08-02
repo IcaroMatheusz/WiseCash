@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 function AuthCard({ title, subtitle, linkTo, linkText, children }) {
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top,_#334155,_#0f172a_70%)] px-4 py-10 font-sans">
+    <div className="min-h-screen bg-[radial-gradient(circle_at_top,#334155,#0f172a_70%)] px-4 py-10 font-sans">
       <header className="mx-auto mb-8 max-w-3xl text-center">
         <h1 className="text-4xl font-bold text-white sm:text-5xl">
           Wise Cash 
