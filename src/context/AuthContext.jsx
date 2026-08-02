@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
 import { supabase } from "../lib/supabase";
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -7,13 +7,30 @@ export const AuthContext = createContext();
 //USANDO CONTEXTAPI PRA LIDAR COM A AUTENTICACAO (LOGOUT, REGISTRO E LOGIN)
 
 export function AuthProvider({ children }) {
+  const [user, setUser] = useState(null); //salvando o usuario
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    async function loadUser() {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      setUser(user);
+      setLoading(false)
+    }
+
+    loadUser();
+  }, []);
+
+  
+
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
     return localStorage.getItem("isAuthenticated") === "true";
   });
 
   async function login(email, password) {
     //LOGIN
-    const { error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
@@ -24,14 +41,14 @@ export function AuthProvider({ children }) {
 
     localStorage.setItem("isAuthenticated", "true");
     setIsAuthenticated(true);
+    setUser(data.user)
 
-    return { success: true, message: "Usuário logado!" };
+    return { success: true, message: "Usuário logado!" };   
   }
 
-
   //register
-  async function register( email, password, username) {
-     const { data, error } = await supabase.auth.signUp({
+  async function register(email, password, username) {
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -43,29 +60,29 @@ export function AuthProvider({ children }) {
     });
 
     if (error) {
-      return { 
-        success: false, message: error.message
-     };
+      return {
+        success: false,
+        message: error.message,
+      };
     }
 
     const { error: profileError } = await supabase.from("profiles").insert({
-        id: data.user.id,
-        name: username,
+      id: data.user.id,
+      name: username,
     });
 
     if (profileError) {
-        return {
-            success: false,
-            message: "Conta criada, mas houve um erro ao salvar o usuário"
-        }
+      return {
+        success: false,
+        message: "Conta criada, mas houve um erro ao salvar o usuário",
+      };
     }
 
     return {
-        success: true,
-        message: "Conta criada com sucesso"
-    }
-      
-    }
+      success: true,
+      message: "Conta criada com sucesso",
+    };
+  }
 
   async function logout() {
     //LOGOUT
@@ -74,11 +91,12 @@ export function AuthProvider({ children }) {
     setIsAuthenticated(false);
   }
 
-
   return (
     <AuthContext.Provider
       value={{
         isAuthenticated,
+        user,
+        loading,
         login,
         register,
         logout,
