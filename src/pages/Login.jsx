@@ -1,6 +1,7 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { supabase } from "../lib/supabase"
+import { supabase } from "../lib/supabase";
+import AuthCard from "../components/AuthCard";
 
 function Login({ setIsAuthenticated }) {
   const [email, setEmail] = useState("");
@@ -10,99 +11,78 @@ function Login({ setIsAuthenticated }) {
   const navigate = useNavigate();
 
   async function handleSubmit(e) {
-    e.preventDefault(); //cancela o carregamento da página, porque no HTML antigo
-    //o formulario recarrega a página toda vez q é apertado um botão
-    //preventdefault previni o comportamento padrão, bem intuitivo
+    e.preventDefault();
 
-    if (email === "" || password === "") { //validacao para verificar se os campos estao vazios
-      setError("Preencha todos os campos"); 
-      return
+    if (email === "" || password === "") {
+      setError("Fill in all fields");
+      return;
     }
 
     // eslint-disable-next-line no-unused-vars
-    const { data, error } = await supabase.auth.signInWithPassword({ //constante para esperar a resposta do supabase
-      email: email, //para utilizar o email, ele está pegando a variável email
-      password: password, //para utilizar a senha, ele está pegando a variável password
-    })
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
 
     if (error) {
-      setError("Usuário ou senha inválidos")
-      return
+      setError("Invalid email or password");
+      return;
     }
 
-    localStorage.setItem("isAuthenticated","true")
+    localStorage.setItem("isAuthenticated", "true");
     setIsAuthenticated(true);
-
     navigate("/dashboard");
   }
 
   return (
-    <>
-      <div className="min-h-screen bg-slate-800 font-sans">
-        <header className="py-10 text-center">
-          <h1 className="text-5xl font-bold text-white">Finance Management</h1>
+    <AuthCard
+      title="Enter your account"
+      subtitle="Access your account to continue"
+      linkTo="/register"
+      linkText="Don't have an account? Sign up"
+    >
+      {error && <p className="mb-4 text-center text-sm font-medium text-red-500">{error}</p>}
 
-          <p className="mt-3 text-xl text-slate-300">
-            Helping you to use optimize your money!
-          </p>
-        </header>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <div>
+          <label htmlFor="email" className="mb-1 block text-sm font-medium text-slate-700">
+            Email
+          </label>
+          <input
+            value={email}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              setError("");
+            }}
+            placeholder="Enter your email"
+            type="email"
+            id="email"
+            className="w-full rounded-lg border border-slate-300 px-4 py-2.5 text-slate-800 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+          />
+        </div>
 
-        <main className="flex justify-center items-center">
-          <div className="w-full max-w-sm rounded-xl bg-white p-8 shadow-lg">
-            <h2 className="mb-6 text-center text-2xl font-bold text-slate-800">
-              Login
-            </h2>
+        <div>
+          <label htmlFor="password" className="mb-1 block text-sm font-medium text-slate-700">
+            Password
+          </label>
+          <input
+            value={password}
+            onChange={(e) => {
+              setPassword(e.target.value);
+              setError("");
+            }}
+            placeholder="Enter your password"
+            type="password"
+            id="password"
+            className="w-full rounded-lg border border-slate-300 px-4 py-2.5 text-slate-800 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+          />
+        </div>
 
-            <p className="text-red-500 text-sm text-center">{error}</p>
-
-            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-              <label
-                htmlFor="email"
-                className="mb-1 block text-sm font-medium text-slate-700"
-              >
-                Email:
-              </label>
-              <input
-                value={email}
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                  setError("");}}
-                placeholder="Digite seu email"
-                type="text"
-                id="email"
-                className="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none focus:border-blue-500"
-              />
-
-              <label
-                htmlFor="password"
-                className="mb-1 block text-sm font-medium text-slate-700"
-              >
-                Password:
-              </label>
-              <input
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                  setError("");
-                }}
-                placeholder="Digite sua senha"
-                type="password"
-                id="password"
-                className="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none focus:border-blue-500"
-              />
-
-              <Link to="/register" className="text-slate-700">
-                Não possui uma conta?
-              </Link>
-
-              <button className="mt-4 rounded-lg bg-slate-800 py-2 font-semibold text-white transition hover:bg-slate-700">
-                Sign in
-              </button>
-            </form>
-          </div>
-        </main>
-      </div>
-    </>
+        <button className="mt-2 rounded-lg bg-slate-800 py-2.5 font-semibold text-white transition hover:bg-slate-700">
+          Enter
+        </button>
+      </form>
+    </AuthCard>
   );
 }
 
