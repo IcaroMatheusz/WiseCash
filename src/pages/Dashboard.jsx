@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 import { Link } from "react-router-dom";
-import { CircleUserIcon, LogOutIcon } from "lucide-react";
+import { Menu, CircleUserIcon/* , LogOutIcon */ } from "lucide-react";
+import SideBar  from '../components/SideBar'
 
-function Dashboard({ setIsAuthenticated, isAuthenticated }) {
+function Dashboard({ /* setIsAuthenticated, */ isAuthenticated }) {
   const navigate = useNavigate();
 
   const [username, setUsername] = useState("");
@@ -12,15 +13,17 @@ function Dashboard({ setIsAuthenticated, isAuthenticated }) {
   const [RendaSalva, setRendaSalva] = useState(null);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
-
-  async function handleLogout() {
+  
+/*   async function handleLogout() {
     //função para lidar com o logout
     await supabase.auth.signOut();
     localStorage.removeItem("isAuthenticated");
     setIsAuthenticated(false);
     navigate("/");
-  }
+  } */
 
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  
   async function getUser() {
     const { data, error } = await supabase.auth.getSession(); //guardando os dados de sessão
 
@@ -80,9 +83,23 @@ function Dashboard({ setIsAuthenticated, isAuthenticated }) {
     <>
       <div className="min-h-screen bg-slate-900">
         <header className="p-4 flex justify-between">
-          <button className="text-white" onClick={handleLogout}>
+
+          
+{/*           <button className="text-white" onClick={handleLogout}>
             <LogOutIcon size={30}/>
-          </button>
+          </button> */}
+
+        <button
+          onClick={() => setIsSidebarOpen(true)}
+          className="text-white"
+        >
+          <Menu size={30}/>
+        </button>
+
+        <SideBar
+          isOpen={isSidebarOpen}
+          onClose={() => setIsSidebarOpen(false)}
+        />
 
           <Link to="#" className="text-white justify-end">
             <CircleUserIcon size={40} />
