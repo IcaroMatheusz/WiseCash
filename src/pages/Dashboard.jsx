@@ -16,8 +16,7 @@ function Dashboard() {
       return;
     }
 
-    const id = data.session.user.id;
-    setUsername(data.session.user.user_metadata?.username); //setando o username para ser o mesmo do objeto na api
+    const id = data.session.user.id; //setando o username para ser o mesmo do objeto na api
 
     const { data: profile } = await supabase
       .from("profiles")

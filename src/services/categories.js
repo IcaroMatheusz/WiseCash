@@ -22,3 +22,12 @@ export async function getCategories(userId) {
 
     return data
 }
+
+export async function deleteCategory(categoryId) {
+    const { error} = await supabase //deletando categoria
+    .from("categories")
+    .delete()
+    .eq("id", categoryId)
+
+    if (error) throw error
+}

@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { addCategory, getCategories } from "../services/categories";
+import { addCategory, getCategories, deleteCategory } from "../services/categories";
 import { useAuth } from "../context/useAuth";
 import HeaderBar from "../components/HeaderBar";
+import { TrashIcon } from "lucide-react";
 
 function Categorias() {
   const { user, loading } = useAuth();
@@ -10,7 +11,7 @@ function Categorias() {
   const [categoria, setCategoria] = useState("");
   const [categorias, setCategorias] = useState([]);
   const [message, setMessage] = useState("");
-  const [tipo, setTipo] = useState("despesa");
+  const [tipo, setTipo] = useState("Despesa");
 
   useEffect(() => {
     async function loadCategories() {
@@ -24,24 +25,32 @@ function Categorias() {
   async function addCategories(e) {
     e.preventDefault();
 
-    console.log("user:", user);
-    console.log("categoria:", categoria);
-    console.log("tipo:", tipo);
-
     if (!user) {
       setError("Usuário não autenticado");
       return;
     }
 
     try {
-      await addCategory({ nome: categoria, tipo, userId: user.id });
-      setCategorias([...categorias, { nome: categoria, tipo }]);
+      const novaCategoria = await addCategory({ nome: categoria, tipo, userId: user.id });
+      setCategorias([...categorias, novaCategoria[0]]); //adicionando um indice de array junto para melhorar o delete de categoria
       setMessage("Categoria adicionada com sucesso");
     } catch (err) {
       console.log(err);
       setError("Erro ao adicionar categoria");
     }
   }
+
+  async function handleDelete(id) {
+    try {
+      await deleteCategory(id)
+      setCategorias(categorias.filter((cat) => cat.id !== id))
+    } catch (err) {
+      console.log(err)
+      setError("Erro ao deletar a categoria")
+    }
+  }
+
+
 
   if (loading) return <p className="text-white">Carregando...</p>;
 
@@ -72,6 +81,7 @@ function Categorias() {
                 onChange={(e) => {
                   setCategoria(e.target.value);
                   setError("");
+                  setMessage("")
                 }}
                 type="text"
                 id="income"
@@ -81,7 +91,7 @@ function Categorias() {
 
               <div className="flex flex-row gap-5">
                 <label
-                  htmlFor="receita"
+                  htmlFor="Receita"
                   className="text-center font-semibold text-gray-700"
                 >
                   Receita
@@ -90,8 +100,8 @@ function Categorias() {
                 <input
                   type="radio"
                   name="tipo"
-                  id="receita"
-                  value="receita"
+                  id="Receita"
+                  value="Receita"
                   onChange={(e) => setTipo(e.target.value)}
                 />
 
@@ -105,8 +115,8 @@ function Categorias() {
                 <input
                   type="radio"
                   name="tipo"
-                  id="despesa"
-                  value="despesa"
+                  id="Despesa"
+                  value="Despesa"
                   onChange={(e) => setTipo(e.target.value)}
                 />
               </div>
@@ -120,25 +130,41 @@ function Categorias() {
             </div>
           </form>
 
-          { categorias.length > 0 ? (
+          {categorias.length > 0 ? (
             <table className="w-full border-collapse bg-white text-left text-sm text-gray-500 rounded-2xl">
               <thead className="bg-gray-50 rounded-2xl">
                 <tr>
-                  <th className="px-6 py-4 font-medium text-gray-900 rounded-2xl">Nome</th>
-                  <th className="px-6 py-4 font-medium text-gray-900 rounded-2xl">Tipo</th>
+                  <th className="px-6 py-4 font-medium text-gray-900 rounded-2xl">
+                    Nome
+                  </th>
+                  <th className="px-6 py-4 font-medium text-gray-900 rounded-2xl">
+                    Tipo
+                  </th>
+                  <th className="px-6 py-4 font-medium text-gray-900 rounded-2xl"></th>
                 </tr>
-
               </thead>
 
               <tbody className="divide-y divide-gray-100 border-t border-gray-100 rounded-2xl">
                 {categorias.map((cat) => (
-                  <tr key={cat.id} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-6 py-4 font-medium text-gray-900">{cat.nome}</td>
-                    <td className="px-6 py-4">{cat.tipo}</td>
+                  <tr
+                    key={cat.id}
+                    className="hover:bg-gray-50 transition-colors"
+                  >
+                    <td className="px-6 py-4 font-medium text-gray-900 rounded-2xl">
+                      {cat.nome}
+                    </td>
+                    <td className="px-6 py-4 rounded-2xl">{cat.tipo}</td>
+                    <td className="p-6 p-4 rounded-2xl text-red-600 cursor-pointer">
+                      <button
+                      onClick={() => handleDelete(cat.id)}
+                      className="cursor-pointer"
+                      >
+                        <TrashIcon size={18} />
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>
-
             </table>
           ) : (
             <p className="text-slate-400">Sem categorias ainda...</p>
