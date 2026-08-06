@@ -1,37 +1,57 @@
-import { CircleArrowUpIcon, CircleArrowDownIcon, WalletIcon} from "lucide-react";
+import {
+  CircleArrowUpIcon,
+  CircleArrowDownIcon,
+  WalletIcon,
+} from "lucide-react";
 import HeaderBar from "../components/HeaderBar";
+import { useState } from "react";
+import InfoCard from "../components/InfoCard";
 
 function Extrato() {
+  const [descricao, setDescricao] = useState("");
+  const [valor, setValor] = useState("");
+  const [tipo, setTipo] = useState("");
+  const [data, setData] = useState("");
+  const [categoryId, setCategoryId] = useState("");
+  const [categorias, setCategorias] = useState([]);
+  const [transactions, setTransacations] = useState([]);
+  const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
+
   return (
     <div className="min-h-screen bg-slate-900">
       <HeaderBar />
       <section className="flex justify-center items-center">
-        <h1 className="text-white text-3xl sm:text-4xl md:text-5xl text-center">Extrato</h1>
+
+        <h1 className="text-white text-3xl sm:text-4xl md:text-5xl text-center">
+
+          Extrato
+
+        </h1>
       </section>
+      
       <main className="flex flex-wrap justify-center gap-5 mt-9 px-4">
-        <div className="w-full max-w-sm sm:w-80 lg:w-85 p-9 bg-slate-800 text-2xl text-slate-100 rounded-2xl">
-          <div className="flex flex-row justify-between ">
-            <p>Saldo Atual</p>
-            <WalletIcon size={38} />
-          </div>
-          <p className="text-slate-100 font-bold">R$ 1000</p>
-        </div>
 
-        <div className="w-full max-w-sm sm:w-80 lg:w-85 p-9 bg-slate-800 text-2xl text-slate-100 rounded-2xl">
-          <div className="flex flex-row justify-between">
-            <p>Receitas</p>
-            <CircleArrowUpIcon size={38} className="text-green-400" />
-          </div>
-          <p className="text-green-400 font-bold">R$ 1000</p>
-        </div>
+        <InfoCard 
+        title="Saldo Atual" 
+        value="R$1.000" 
+        icon={WalletIcon} />
 
-        <div className="w-full max-w-sm sm:w-80 lg:w-85 p-9 bg-slate-800 text-2xl text-slate-100 rounded-2xl">
-          <div className="flex flex-row justify-between ">
-            <p>Despesas</p>
-            <CircleArrowDownIcon size={38} className="text-red-400" />
-          </div>
-          <p className=" text-red-400 font-bold">R$ 1000</p>
-        </div>
+        <InfoCard
+          title="Receitas"
+          value="R$ 1.000"
+          icon={CircleArrowUpIcon}
+          valueColor="text-green-400"
+          iconColor="text-green-400"
+        />
+
+        <InfoCard
+          title="Despesas"
+          value="R$ 1.000"
+          icon={CircleArrowDownIcon}
+          valueColor="text-red-400"
+          iconColor="text-red-400"
+        />
       </main>
 
       <div className="flex justify-center mt-8 px-4 pb-10">
@@ -41,7 +61,6 @@ function Extrato() {
           </h2>
 
           <form className="grid grid-cols-1 md:grid-cols-12 gap-5">
-
             <div className="md:col-span-3">
               <label className="block text-sm font-medium text-gray-600 mb-2">
                 Tipo
@@ -60,7 +79,6 @@ function Extrato() {
               </div>
             </div>
 
-
             <div className="md:col-span-4">
               <label className="block text-sm font-medium text-gray-600 mb-2">
                 Categoria
@@ -70,7 +88,6 @@ function Extrato() {
                 <option>Academia</option>
               </select>
             </div>
-
 
             <div className="md:col-span-5">
               <label className="block text-sm font-medium text-gray-600 mb-2">
@@ -84,7 +101,6 @@ function Extrato() {
               />
             </div>
 
-
             <div className="md:col-span-6">
               <label className="block text-sm font-medium text-gray-600 mb-2">
                 Descrição
@@ -96,7 +112,6 @@ function Extrato() {
                 className="w-full border rounded-lg p-3"
               />
             </div>
-
 
             <div className="md:col-span-6">
               <label className="block text-sm font-medium text-gray-600 mb-2">
