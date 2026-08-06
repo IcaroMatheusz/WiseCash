@@ -60,12 +60,12 @@ function Dashboard() {
   return (
     <>
       <div className="min-h-screen bg-slate-900">
-        <HeaderBar />
 
-        <main className="flex justify-center items-center flex-col">
-          <h3 className="text-white text-2xl m-4 font-bold">
-            Bem vindo
-          </h3>
+        <HeaderBar 
+        title='Dashboard'
+        />
+
+        <main className="flex justify-center items-center mt-9 flex-col">
 
           <section className="flex justify-center items-center">
             <form
@@ -79,7 +79,7 @@ function Dashboard() {
                   htmlFor="income"
                   className="text-sm font-semibold text-gray-700"
                 >
-                  Renda Mensal
+                  Adicionar Renda Mensal
                 </label>
 
                 <input

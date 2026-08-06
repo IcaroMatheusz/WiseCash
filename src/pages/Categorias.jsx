@@ -56,10 +56,11 @@ function Categorias() {
 
   return (
     <div className="min-h-screen bg-slate-900">
-      <HeaderBar />
+      <HeaderBar
+      title='Categorias'
+      />
 
       <section className="flex justify-center items-center flex-col">
-        <h1 className="text-white text-5xl p-4">Categorias</h1>
 
         <main className="flex juystify-center items-center flex-col gap-5">
           <p className="text-red-500">{error}</p>

@@ -20,16 +20,10 @@ function Extrato() {
 
   return (
     <div className="min-h-screen bg-slate-900">
-      <HeaderBar />
-      <section className="flex justify-center items-center">
+      <HeaderBar 
+      title='Extrato'
+      />
 
-        <h1 className="text-white text-3xl sm:text-4xl md:text-5xl text-center">
-
-          Extrato
-
-        </h1>
-      </section>
-      
       <main className="flex flex-wrap justify-center gap-5 mt-9 px-4">
 
         <InfoCard 
