@@ -4,8 +4,11 @@ import {
   WalletIcon,
 } from "lucide-react";
 import HeaderBar from "../components/HeaderBar";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import InfoCard from "../components/InfoCard";
+import { getTransactions } from "../services/transactions";
+import { getCategories } from "../services/categories";
+import { useAuth } from "../context/useAuth";
 
 function Extrato() {
   const [descricao, setDescricao] = useState("");
@@ -18,18 +21,27 @@ function Extrato() {
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
 
+  const { user, loading } = useAuth();
+
+  useEffect(() => {
+    async function loadData() {
+      if (!user) return;
+      const cats = await getCategories(user.id);
+      setCategorias(cats);
+      const trans = await getTransactions(user.id);
+      setTransacations(trans);
+    }
+    loadData();
+  }, [user]);
+
+  if (loading) return <p className="text-white">Carregando...</p>;
+
   return (
     <div className="min-h-screen bg-slate-900">
-      <HeaderBar 
-      title='Extrato'
-      />
+      <HeaderBar title="Extrato" />
 
       <main className="flex flex-wrap justify-center gap-5 mt-9 px-4">
-
-        <InfoCard 
-        title="Saldo Atual" 
-        value="R$1.000" 
-        icon={WalletIcon} />
+        <InfoCard title="Saldo Atual" value="R$1.000" icon={WalletIcon} />
 
         <InfoCard
           title="Receitas"
@@ -78,8 +90,19 @@ function Extrato() {
                 Categoria
               </label>
 
-              <select className="w-full border rounded-lg p-3">
-                <option>Academia</option>
+              <select
+                className="w-full border rounded-lg p-3"
+                onChange={(e) => {
+                  const cat = categorias.find((c) => c.id === e.target.value);
+                  setCategoryId(e.target.value);
+                  setTipo(cat.tipo); //preenchendo o tipo automaticamente
+                }}
+              >
+                {categorias.map((cat) => (
+                  <option key={cat.id} value={cat.id}>
+                    {cat.nome} - {cat.tipo}
+                  </option>
+                ))}
               </select>
             </div>
 

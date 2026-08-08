@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { addCategory, getCategories, deleteCategory } from "../services/categories";
 import { useAuth } from "../context/useAuth";
 import HeaderBar from "../components/HeaderBar";
-import { TrashIcon } from "lucide-react";
+import { EditIcon, TrashIcon } from "lucide-react";
 
 function Categorias() {
   const { user, loading } = useAuth();
@@ -49,6 +49,7 @@ function Categorias() {
       setError("Erro ao deletar a categoria")
     }
   }
+  
 
 
 
@@ -161,6 +162,14 @@ function Categorias() {
                       className="cursor-pointer"
                       >
                         <TrashIcon size={18} />
+                      </button>
+                    </td>
+                                        <td className="p-6 p-4 rounded-2xl text-slate-900 cursor-pointer">
+                      <button
+                      onClick={() => handleEdit(cat.id)}
+                      className="cursor-pointer"
+                      >
+                        <EditIcon size={18} />
                       </button>
                     </td>
                   </tr>
