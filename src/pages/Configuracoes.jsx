@@ -1,17 +1,14 @@
-
-import HeaderBar from "../components/HeaderBar";
+import MainLayout from "../components/MainLayout";
 
 function Configuracoes() {
   return (
-    <div className="min-h-screen bg-slate-900">
-      <HeaderBar
-      title='Configurações'
-       />
+    <MainLayout title="Configurações">
 
       <section className="flex justify-center items-center">
 
       </section>
-    </div>
+
+    </MainLayout>
   );
 }
 

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { addCategory, getCategories, deleteCategory } from "../services/categories";
 import { useAuth } from "../context/useAuth";
-import HeaderBar from "../components/HeaderBar";
 import { EditIcon, TrashIcon } from "lucide-react";
+import MainLayout from "../components/MainLayout";
 
 function Categorias() {
   const { user, loading } = useAuth();
@@ -56,10 +56,8 @@ function Categorias() {
   if (loading) return <p className="text-white">Carregando...</p>;
 
   return (
-    <div className="min-h-screen bg-slate-900">
-      <HeaderBar
-      title='Categorias'
-      />
+    <>
+    <MainLayout title='Categorias'>
 
       <section className="flex justify-center items-center flex-col">
 
@@ -181,7 +179,8 @@ function Categorias() {
           )}
         </main>
       </section>
-    </div>
+    </MainLayout>
+    </>
   );
 }
 

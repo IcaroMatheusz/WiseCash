@@ -7,6 +7,7 @@ import Dashboard from "./pages/Dashboard";
 import Extrato from "./pages/Extrato";
 import Categorias from "./pages/Categorias";
 import Configuracoes from "./pages/Configuracoes";
+import UserEditPage from "./pages/UserEditPage";
 import { AuthProvider } from "./context/AuthContext";
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
           <Route path="/extrato" element={<Extrato />}/>
           <Route path="/categorias" element={<Categorias />}/>
           <Route path='/configuracoes' element={< Configuracoes/>}/>
+          <Route path="/useredit" element={< UserEditPage/>}/>
           <Route path="/dashboard" element={<Dashboard />}/>
         </Routes>
       </BrowserRouter>

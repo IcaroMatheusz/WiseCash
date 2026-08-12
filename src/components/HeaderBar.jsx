@@ -25,7 +25,7 @@ function HeaderBar({ title }) {
       <h1 className="justify-self-center text-4xl text-white">{title}</h1>
 
       <Link
-        to="#"
+        to="/useredit"
         className="justify-self-end flex items-center gap-2 text-white"
       >
         <span className="text-slate-300 text-2xl">

@@ -3,7 +3,7 @@ import {
   CircleArrowDownIcon,
   WalletIcon,
 } from "lucide-react";
-import HeaderBar from "../components/HeaderBar";
+import MainLayout from "../components/MainLayout";
 import { useState, useEffect } from "react";
 import InfoCard from "../components/InfoCard";
 import { getTransactions } from "../services/transactions";
@@ -37,8 +37,7 @@ function Extrato() {
   if (loading) return <p className="text-white">Carregando...</p>;
 
   return (
-    <div className="min-h-screen bg-slate-900">
-      <HeaderBar title="Extrato" />
+    <MainLayout title="Extrato">
 
       <main className="flex flex-wrap justify-center gap-5 mt-9 px-4">
         <InfoCard title="Saldo Atual" value="R$1.000" icon={WalletIcon} />
@@ -146,7 +145,7 @@ function Extrato() {
           </form>
         </div>
       </div>
-    </div>
+    </MainLayout>
   );
 }
 

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
-import HeaderBar from "../components/HeaderBar";
+import MainLayout from "../components/MainLayout";
 
 function Dashboard() {
   const [renda, setRenda] = useState();
@@ -59,11 +59,7 @@ function Dashboard() {
 
   return (
     <>
-      <div className="min-h-screen bg-slate-900">
-
-        <HeaderBar 
-        title='Dashboard'
-        />
+      <MainLayout title='Dashboard'>
 
         <main className="flex justify-center items-center mt-9 flex-col">
 
@@ -110,7 +106,7 @@ function Dashboard() {
             </form>
           </section>
         </main>
-      </div>
+      </MainLayout>
     </>
   );
 }
