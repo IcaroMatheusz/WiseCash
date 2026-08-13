@@ -38,17 +38,25 @@ function UserEditPage() {
                 <h3>Sem foto de Perfil</h3>
               )}
 
-              <input //PREVIEW DA PFP
+              <label //PREVIEW DA PFP
+                htmlFor="profile-picture"
+                className="block w-40 border text-center text-gray-400 border-slate-500 rounded-lg p-3 cursor-pointer hover:bg-slate-700 transition"
+              >
+                Escolher arquivo
+              </label>
+
+              <input 
+                id="profile-picture"
                 type="file"
                 accept="image/*"
                 onChange={(e) => {
                   const file = e.target.files[0];
 
                   if (file) {
-                    setPfp(URL.createObjectURL(file)); 
+                    setPfp(URL.createObjectURL(file));
                   }
                 }}
-                className="w-full border border-slate-500 rounded-lg p-3"
+                className="hidden"
               />
 
               <label htmlFor="username" className="">
