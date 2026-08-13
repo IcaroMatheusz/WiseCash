@@ -12,7 +12,7 @@ function UserEditPage() {
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
 
-  const { user } = useAuth();
+  const { user, refreshProfile } = useAuth();
 
   async function handleEdit(e) {
     e.preventDefault();
@@ -42,6 +42,7 @@ function UserEditPage() {
         //fazendo o upload do arquivo
         const file = pfpFile //guardando o arquivo
 
+        // eslint-disable-next-line no-unused-vars
         const { data, error: uploadError } = await supabase.storage
         .from("pfp") //nome do bucket dentro do supabase
         .upload(`${user.id}/avatar`, file, { upsert: true })
@@ -63,6 +64,7 @@ function UserEditPage() {
         if (error) throw error
       }
 
+      await refreshProfile(user.id)
       setMessage("Perfil Atualizado");
      
     } catch (err) {

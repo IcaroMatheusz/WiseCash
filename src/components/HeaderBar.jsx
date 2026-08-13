@@ -9,6 +9,11 @@ function HeaderBar({ title }) {
 
   const { user, profile } = useAuth();
 
+  if (!user) return null;
+
+  console.log("profile:", profile);
+  console.log("user:", user);
+
   return (
     <header className="grid grid-cols-3 items-center p-4">
       <div className="justify-self-start">
@@ -34,7 +39,8 @@ function HeaderBar({ title }) {
 
         {profile?.pfp ? (
           <img
-            src={profile.pfp}
+            // eslint-disable-next-line react-hooks/purity
+            src={`${profile.pfp}?t=${Date.now()}`}
             alt="foto de perfil"
             className="w-15 h-15 rounded-full object-cover"
           />

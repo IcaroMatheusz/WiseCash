@@ -8,8 +8,8 @@ export const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null); //salvando o usuario
-  const [loading, setLoading] = useState(true)
-  const [profile, setProfile] = useState(null)
+  const [loading, setLoading] = useState(true);
+  const [profile, setProfile] = useState(null);
 
   useEffect(() => {
     async function loadUser() {
@@ -17,22 +17,21 @@ export function AuthProvider({ children }) {
         data: { user },
       } = await supabase.auth.getUser();
       setUser(user);
-      
+
       if (user) {
         const { data: profile } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("id",user.id)
-        .single()
+          .from("profiles")
+          .select("*")
+          .eq("id", user.id)
+          .single();
 
-        setProfile(profile)
+        setProfile(profile);
       }
-      setLoading(false)
+      setLoading(false);
     }
 
     loadUser();
   }, []);
-
 
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
     return localStorage.getItem("isAuthenticated") === "true";
@@ -49,11 +48,20 @@ export function AuthProvider({ children }) {
       return { success: false, message: error.message };
     }
 
+    //buscando o perfil do usuario que acabou de logar
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("id", data.user.id)
+      .single();
+
+    setProfile(profile);
+
     localStorage.setItem("isAuthenticated", "true");
     setIsAuthenticated(true);
-    setUser(data.user)
+    setUser(data.user);
 
-    return { success: true, message: "Usuário logado!" };   
+    return { success: true, message: "Usuário logado!" };
   }
 
   //register
@@ -101,6 +109,15 @@ export function AuthProvider({ children }) {
     setIsAuthenticated(false);
   }
 
+  async function refreshProfile(userId) {
+    const { data } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("id", userId)
+      .single();
+    setProfile(data);
+  }
+
   return (
     <AuthContext.Provider
       value={{
@@ -111,6 +128,7 @@ export function AuthProvider({ children }) {
         login,
         register,
         logout,
+        refreshProfile,
       }}
     >
       {children}

@@ -7,13 +7,13 @@ import { useAuth } from "../context/useAuth";
 import { WalletIcon, CircleArrowUpIcon, CircleArrowDownIcon } from "lucide-react";
 
 function Dashboard() {
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
   const [renda, setRenda] = useState();
   const [RendaSalva, setRendaSalva] = useState(null);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [transactions, setTransactions] = useState([]);
-  
+
   async function getUser() {
     const { data, error } = await supabase.auth.getSession(); //guardando os dados de sessão
 
@@ -81,6 +81,8 @@ function Dashboard() {
   const formatCurrency = (value) =>
     value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
+  const saldoAtual = (Number(profile?.income || 0 ) + receitas - despesas)
+
   return (
     <>
       <MainLayout title='Dashboard'>
@@ -90,7 +92,7 @@ function Dashboard() {
           <section className="flex flex-wrap justify-center gap-5 mb-9">
             <InfoCard
               title="Saldo Atual"
-              value={formatCurrency(receitas - despesas)}
+              value={formatCurrency(saldoAtual)}
               icon={WalletIcon}
             />
 

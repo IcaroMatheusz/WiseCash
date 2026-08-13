@@ -21,7 +21,9 @@ function Extrato() {
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
 
-  const { user, loading } = useAuth();
+  const { user, loading, profile } = useAuth(); 
+
+  
 
   useEffect(() => {
     async function loadData() {
@@ -76,6 +78,8 @@ function Extrato() {
   const formatCurrency = (value) =>
     value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
+  const saldoAtual = (Number(profile?.income || 0 ) + receitas - despesas)
+
   if (loading) return <p className="text-white">Carregando...</p>;
 
   return (
@@ -84,7 +88,7 @@ function Extrato() {
       <main className="flex flex-wrap justify-center gap-5 mt-9 px-4">
         <InfoCard
           title="Saldo Atual"
-          value={formatCurrency(receitas - despesas)}
+          value={formatCurrency(saldoAtual)}
           icon={WalletIcon}
         />
 
