@@ -1,12 +1,18 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
 import MainLayout from "../components/MainLayout";
+import InfoCard from "../components/InfoCard";
+import { getTransactions } from "../services/transactions";
+import { useAuth } from "../context/useAuth";
+import { WalletIcon, CircleArrowUpIcon, CircleArrowDownIcon } from "lucide-react";
 
 function Dashboard() {
+  const { user } = useAuth();
   const [renda, setRenda] = useState();
   const [RendaSalva, setRendaSalva] = useState(null);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
+  const [transactions, setTransactions] = useState([]);
   
   async function getUser() {
     const { data, error } = await supabase.auth.getSession(); //guardando os dados de sessão
@@ -57,11 +63,53 @@ function Dashboard() {
       getUser();
     },[]) 
 
+  useEffect(() => {
+    async function loadTransactions() {
+      if (!user) return;
+      const data = await getTransactions(user.id);
+      setTransactions(data);
+    }
+    loadTransactions();
+  }, [user]);
+
+  const receitas = transactions
+    .filter((transaction) => transaction.tipo.toLowerCase() === "receita")
+    .reduce((total, transaction) => total + Number(transaction.valor), 0);
+  const despesas = transactions
+    .filter((transaction) => transaction.tipo.toLowerCase() === "despesa")
+    .reduce((total, transaction) => total + Number(transaction.valor), 0);
+  const formatCurrency = (value) =>
+    value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+
   return (
     <>
       <MainLayout title='Dashboard'>
 
         <main className="flex justify-center items-center mt-9 flex-col">
+
+          <section className="flex flex-wrap justify-center gap-5 mb-9">
+            <InfoCard
+              title="Saldo Atual"
+              value={formatCurrency(receitas - despesas)}
+              icon={WalletIcon}
+            />
+
+            <InfoCard
+              title="Receitas"
+              value={formatCurrency(receitas)}
+              icon={CircleArrowUpIcon}
+              valueColor="text-green-400"
+              iconColor="text-green-400"
+            />
+
+            <InfoCard
+              title="Despesas"
+              value={formatCurrency(despesas)}
+              icon={CircleArrowDownIcon}
+              valueColor="text-red-400"
+              iconColor="text-red-400"
+            />
+          </section>
 
           <section className="flex justify-center items-center">
             <form
