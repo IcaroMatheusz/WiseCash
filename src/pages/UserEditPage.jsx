@@ -1,21 +1,73 @@
 import { useState } from "react";
 import MainLayout from "../components/MainLayout";
+import { supabase } from "../lib/supabase";
+import { useAuth } from "../context/useAuth";
 
 function UserEditPage() {
   const [pfp, setPfp] = useState("");
+  const [pfpFile, setPfpFile] = useState(null);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmpassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
 
-  function handleEdit(e) {
+  const { user } = useAuth();
+
+  async function handleEdit(e) {
     e.preventDefault();
-
     setError("");
 
     if (confirmpassword !== password) {
       setError("A senha não é a mesma!");
       return;
+    }
+
+    try {
+      //atualizando a senha no supabase
+      if (password) {
+        const { error } = await supabase.auth.updateUser({ password });
+        if (error) throw error;
+      }
+      //atualizando o usuário no supabase
+      if (username) {
+        const { error } = await supabase
+          .from("profiles")
+          .update({ name: username })
+          .eq("id", user.id);
+        if (error) throw error;
+      }
+
+      if (pfp) { 
+        //fazendo o upload do arquivo
+        const file = pfpFile //guardando o arquivo
+
+        const { data, error: uploadError } = await supabase.storage
+        .from("pfp") //nome do bucket dentro do supabase
+        .upload(`${user.id}/avatar`, file, { upsert: true })
+
+        if (uploadError) throw uploadError
+
+        //pegando a ULR pública
+        const { data: { publicUrl } } = supabase.storage
+        .from("pfp")
+        .getPublicUrl(`${user.id}/avatar`)
+
+
+        //salvando a url no banco do supabase
+        const { error } = await supabase
+        .from("profiles")
+        .update({ pfp: publicUrl })
+        .eq("id", user.id)
+        
+        if (error) throw error
+      }
+
+      setMessage("Perfil Atualizado");
+     
+    } catch (err) {
+        console.log(err)
+      setError("Erro ao atualizar o perfil");
     }
   }
 
@@ -23,19 +75,20 @@ function UserEditPage() {
     <>
       <MainLayout title="Configuração do Usuário">
         <main className="flex justify-center items-center text-white">
-          <div className="w-2xl mx-auto bg-slate-800 rounded-2xl border border-gray-50 overflow-hhtmlForden my-8">
+          <div className="w-2xl mx-auto bg-slate-800 rounded-2xl border border-gray-50 overflow-hidden my-8">
             <form
               onSubmit={handleEdit}
               className="px-18 py-6 space-y-6 flex flex-col mb-8 text-white"
             >
               <span className="text-red-500">{error}</span>
+              <span className="text-green-500">{message}</span>
 
               <h1 className="font-bold">Editar Perfil</h1>
 
               {pfp ? (
                 <img src={pfp} alt="fotodeperfil" className="w-40 rounded-xl" />
               ) : (
-                <h3>Sem foto de Perfil</h3>
+                <h3>Carregue uma foto de perfil</h3>
               )}
 
               <label //PREVIEW DA PFP
@@ -45,7 +98,7 @@ function UserEditPage() {
                 Escolher arquivo
               </label>
 
-              <input 
+              <input
                 id="profile-picture"
                 type="file"
                 accept="image/*"
@@ -54,6 +107,7 @@ function UserEditPage() {
 
                   if (file) {
                     setPfp(URL.createObjectURL(file));
+                    setPfpFile(file)
                   }
                 }}
                 className="hidden"
@@ -87,6 +141,13 @@ function UserEditPage() {
                 placeholder="Digite sua nova senha"
                 className="w-full border border-slate-500 rounded-lg p-3"
               />
+
+              <button
+                type="submit"
+                className="max-w-2xl max-sm: bg-slate-600 hover:bg-slate-700 text-white font-medium py-2.5 px-4 rounded-lg transition-colors shadow-sm"
+              >
+                Atualizar Perfil
+              </button>
             </form>
           </div>
         </main>

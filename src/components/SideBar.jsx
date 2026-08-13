@@ -1,4 +1,4 @@
-import { Home, FolderIcon, Receipt, Settings, LogOut, X } from "lucide-react";
+import { Home, FolderIcon, Receipt, LogOut, X } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/useAuth";
 
@@ -17,7 +17,6 @@ function SideBar({ isOpen, onClose }) {
     { label: "Início", icon: Home, path: "/dashboard" },
     { label: "Extrato", icon: Receipt, path: "/extrato" },
     { label: "Categorias", icon: FolderIcon, path: "/categorias" },
-    { label: "Configurações", icon: Settings, path: "/configuracoes" },
     { label: "Log out", icon: LogOut, action: handleLogout },
   ];
 

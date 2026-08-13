@@ -9,6 +9,7 @@ export const AuthContext = createContext();
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null); //salvando o usuario
   const [loading, setLoading] = useState(true)
+  const [profile, setProfile] = useState(null)
 
   useEffect(() => {
     async function loadUser() {
@@ -16,13 +17,22 @@ export function AuthProvider({ children }) {
         data: { user },
       } = await supabase.auth.getUser();
       setUser(user);
+      
+      if (user) {
+        const { data: profile } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id",user.id)
+        .single()
+
+        setProfile(profile)
+      }
       setLoading(false)
     }
 
     loadUser();
   }, []);
 
-  
 
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
     return localStorage.getItem("isAuthenticated") === "true";
@@ -96,6 +106,7 @@ export function AuthProvider({ children }) {
       value={{
         isAuthenticated,
         user,
+        profile,
         loading,
         login,
         register,

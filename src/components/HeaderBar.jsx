@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 function HeaderBar({ title }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
 
   return (
     <header className="grid grid-cols-3 items-center p-4">
@@ -31,7 +31,16 @@ function HeaderBar({ title }) {
         <span className="text-slate-300 text-2xl">
           {user.user_metadata?.username}
         </span>
-        <CircleUserIcon size={40} />
+
+        {profile?.pfp ? (
+          <img
+            src={profile.pfp}
+            alt="foto de perfil"
+            className="w-15 h-15 rounded-full object-cover"
+          />
+        ) : (
+          <CircleUserIcon size={40} />
+        )}
       </Link>
     </header>
   );
