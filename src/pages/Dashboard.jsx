@@ -115,7 +115,7 @@ function Dashboard() {
                     setRenda(e.target.value);
                     setError("");
                   }}
-                  type="text"
+                  type="number"
                   id="income"
                   placeholder="R$ 0,00"
                   className="w-full px-4 py-2.5 text-gray-800 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
