@@ -8,7 +8,7 @@ function AuthCard({ title, subtitle, linkTo, linkText, children }) {
           Wise Cash 
         </h1>
         <p className="mt-3 text-lg text-slate-300">
-          Helping you to use optimize your money!
+          Ajudando você a otimizar seu dinheiro!
         </p>
       </header>
 

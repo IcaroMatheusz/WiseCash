@@ -11,34 +11,10 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState(null);
 
-  useEffect(() => {
-    async function loadUser() {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      setUser(user);
+  const isAuthenticated = !!user //removido a autenticação com useState, agora se tiver usuário, user vira true, se não tiver, ele fica null
 
-      if (user) {
-        const { data: profile } = await supabase
-          .from("profiles")
-          .select("*")
-          .eq("id", user.id)
-          .single();
-
-        setProfile(profile);
-      }
-      setLoading(false);
-    }
-
-    loadUser();
-  }, []);
-
-  const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    return localStorage.getItem("isAuthenticated") === "true";
-  });
-
-  async function login(email, password) {
-    //LOGIN
+  async function login(email, password) { //LOGIN
+    
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -56,16 +32,12 @@ export function AuthProvider({ children }) {
       .single();
 
     setProfile(profile);
-
-    localStorage.setItem("isAuthenticated", "true");
-    setIsAuthenticated(true);
     setUser(data.user);
-
     return { success: true, message: "Usuário logado!" };
   }
 
-  //register
-  async function register(email, password, username) {
+  
+  async function register(email, password, username) { //REGISTER
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -84,7 +56,7 @@ export function AuthProvider({ children }) {
       };
     }
 
-    const { error: profileError } = await supabase.from("profiles").insert({
+    const { error: profileError } = await supabase.from("profiles").insert({ //ADICIONADO O USERNAME ASSIM QUE LOGA
       id: data.user.id,
       name: username,
     });
@@ -102,11 +74,8 @@ export function AuthProvider({ children }) {
     };
   }
 
-  async function logout() {
-    //LOGOUT
+  async function logout() { //LOGOUT
     await supabase.auth.signOut();
-    localStorage.removeItem("isAuthenticated");
-    setIsAuthenticated(false);
   }
 
   async function refreshProfile(userId) {
@@ -117,6 +86,30 @@ export function AuthProvider({ children }) {
       .single();
     setProfile(data);
   }
+
+  useEffect(() => { //Foi substituído o LoadUser anterior pelo onAuthStateChange, pra evitar bugs de usuário de usuário logar e ir parar no perfil do outro
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (session?.user) {
+        setUser(session.user);
+
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("*")
+          .eq("id", session.user.id)
+          .single();
+
+        setProfile(profile);
+      } else {
+        setUser(null);
+        setProfile(null);
+      }
+      setLoading(false);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   return (
     <AuthContext.Provider

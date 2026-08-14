@@ -25,7 +25,7 @@ function Register() {
 
     console.log(result);
 
-    if (!result) {
+    if (!result.sucess) {
       setError(result.message);
       return;
     }
@@ -33,16 +33,19 @@ function Register() {
       setEmail("");
       setUsername("");
       setPassword("");
-      setMessage("Registration successful");
-      navigate("/")
+
+      if (result.success) {
+        setMessage(result.message)
+        navigate("/")
+      }
   }
 
   return (
     <AuthCard
-      title="Create account"
-      subtitle="Sign up to start managing your finances"
+      title="Criar Conta"
+      subtitle="Crie sua conta para começar a gerenciar suas finanças"
       linkTo="/"
-      linkText="Already have an account? Log in now"
+      linkText="Já possui uma conta? Entre"
     >
       {error && <p className="mb-4 text-center text-sm font-medium text-red-500">{error}</p>}
       {message && <p className="mb-4 text-center text-sm font-medium text-green-600">{message}</p>}
@@ -50,7 +53,7 @@ function Register() {
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div>
           <label htmlFor="username" className="mb-1 block text-sm font-medium text-slate-700">
-            Username
+            Nome de Usuário
           </label>
           <input
             value={username}
@@ -58,7 +61,7 @@ function Register() {
               setUsername(e.target.value);
               setError("");
             }}
-            placeholder="Choose a username"
+            placeholder="Insira seu nome de usuário"
             type="text"
             id="username"
             className="w-full rounded-lg border border-slate-300 px-4 py-2.5 text-slate-800 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
@@ -77,7 +80,7 @@ function Register() {
             }}
             type="email"
             id="email"
-            placeholder="seu@email.com"
+            placeholder="Insira seu email"
             className="w-full rounded-lg border border-slate-300 px-4 py-2.5 text-slate-800 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
           />
         </div>
@@ -92,7 +95,7 @@ function Register() {
               setPassword(e.target.value);
               setError("");
             }}
-            placeholder="Create a password"
+            placeholder="Crie sua senha"
             type="password"
             id="password"
             className="w-full rounded-lg border border-slate-300 px-4 py-2.5 text-slate-800 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
@@ -100,7 +103,7 @@ function Register() {
         </div>
 
         <button className="mt-2 rounded-lg bg-slate-800 py-2.5 font-semibold text-white transition hover:bg-slate-700">
-          Sign up
+          Criar Conta
         </button>
       </form>
     </AuthCard>

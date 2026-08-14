@@ -1,10 +1,15 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
 import MainLayout from "../components/MainLayout";
 import InfoCard from "../components/InfoCard";
 import { getTransactions } from "../services/transactions";
 import { useAuth } from "../context/useAuth";
-import { WalletIcon, CircleArrowUpIcon, CircleArrowDownIcon } from "lucide-react";
+import {
+  WalletIcon,
+  CircleArrowUpIcon,
+  CircleArrowDownIcon,
+} from "lucide-react";
 
 function Dashboard() {
   const { user, profile } = useAuth();
@@ -13,27 +18,6 @@ function Dashboard() {
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [transactions, setTransactions] = useState([]);
-
-  async function getUser() {
-    const { data, error } = await supabase.auth.getSession(); //guardando os dados de sessão
-
-    if (error) {
-      setError("Erro ao exibir usuário");
-      return;
-    }
-
-    const id = data.session.user.id; //setando o username para ser o mesmo do objeto na api
-
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("income")
-      .eq("id", id)
-      .single();
-
-    if (profile) {
-      setRendaSalva(profile.income);
-    }
-  }
 
   async function adicionarRenda(e) {
     e.preventDefault();
@@ -59,9 +43,10 @@ function Dashboard() {
   }
 
   useEffect(() => {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      getUser();
-    },[]) 
+    if (profile) {
+      setRendaSalva(profile.income);
+    }
+  }, [profile]);
 
   useEffect(() => {
     async function loadTransactions() {
@@ -81,14 +66,12 @@ function Dashboard() {
   const formatCurrency = (value) =>
     value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
-  const saldoAtual = (Number(profile?.income || 0 ) + receitas - despesas)
+  const saldoAtual = Number(profile?.income || 0) + receitas - despesas;
 
   return (
     <>
-      <MainLayout title='Dashboard'>
-
+      <MainLayout title="Dashboard">
         <main className="flex justify-center items-center mt-9 flex-col">
-
           <section className="flex flex-wrap justify-center gap-5 mb-9">
             <InfoCard
               title="Saldo Atual"
