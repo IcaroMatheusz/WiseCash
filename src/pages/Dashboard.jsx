@@ -16,7 +16,6 @@ function Dashboard() {
   const [renda, setRenda] = useState();
   const [RendaSalva, setRendaSalva] = useState(null);
   const [error, setError] = useState("");
-  const [message, setMessage] = useState("");
   const [transactions, setTransactions] = useState([]);
 
   async function adicionarRenda(e) {
@@ -38,7 +37,6 @@ function Dashboard() {
       return;
     }
 
-    setMessage("Renda atualizada");
     setRendaSalva(renda);
   }
 
@@ -66,7 +64,8 @@ function Dashboard() {
   const formatCurrency = (value) =>
     value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
-  const saldoAtual = Number(profile?.income || 0) + receitas - despesas;
+  const saldoAtual = Number(RendaSalva || 0) + receitas - despesas; //alterado para usar o "RendaSalva" ao invés do "profile?.income", pq o RendaSalva atualiza a página e mostra o resultado
+  //deixando o código mais dinâmico
 
   return (
     <>
@@ -129,7 +128,7 @@ function Dashboard() {
                 </p>
               )}
 
-              <p className="text-green-500"> {message} </p>
+              
               <button
                 type="submit"
                 className="w-full bg-slate-600 hover:bg-slate-700 text-white font-medium py-2.5 px-4 rounded-lg transition-colors shadow-sm"
