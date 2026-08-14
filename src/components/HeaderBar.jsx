@@ -11,9 +11,6 @@ function HeaderBar({ title }) {
 
   if (!user) return null;
 
-  console.log("profile:", profile);
-  console.log("user:", user);
-
   return (
     <header className="grid grid-cols-3 items-center p-4">
       <div className="justify-self-start">

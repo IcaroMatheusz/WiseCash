@@ -29,46 +29,61 @@ function UserEditPage() {
         const { error } = await supabase.auth.updateUser({ password });
         if (error) throw error;
       }
+
       //atualizando o usuário no supabase
       if (username) {
-        const { error } = await supabase
+
+        const { data: profileData, error: profileError } = await supabase
           .from("profiles")
           .update({ name: username })
           .eq("id", user.id);
-        if (error) throw error;
+
+
+          console.log(profileError)
+          console.log(profileData)
+
+        const { data: authData, error: authError  } = await supabase.auth.updateUser({ //colocado para alterar o nome de usuário dentro do JSON do auth do supabase
+          data: { 
+            username: username,
+            display_name: username,
+            full_name: username
+          },
+        });
+
+        console.log(authData)
+
+        if ( authError) throw error;
       }
 
-      if (pfp) { 
+      if (pfp) {
         //fazendo o upload do arquivo
-        const file = pfpFile //guardando o arquivo
+        const file = pfpFile; //guardando o arquivo
 
         // eslint-disable-next-line no-unused-vars
         const { data, error: uploadError } = await supabase.storage
-        .from("pfp") //nome do bucket dentro do supabase
-        .upload(`${user.id}/avatar`, file, { upsert: true })
+          .from("pfp") //nome do bucket dentro do supabase
+          .upload(`${user.id}/avatar`, file, { upsert: true });
 
-        if (uploadError) throw uploadError
+        if (uploadError) throw uploadError;
 
         //pegando a ULR pública
-        const { data: { publicUrl } } = supabase.storage
-        .from("pfp")
-        .getPublicUrl(`${user.id}/avatar`)
-
+        const {
+          data: { publicUrl },
+        } = supabase.storage.from("pfp").getPublicUrl(`${user.id}/avatar`);
 
         //salvando a url no banco do supabase
         const { error } = await supabase
-        .from("profiles")
-        .update({ pfp: publicUrl })
-        .eq("id", user.id)
-        
-        if (error) throw error
+          .from("profiles")
+          .update({ pfp: publicUrl })
+          .eq("id", user.id);
+
+        if (error) throw error;
       }
 
-      await refreshProfile(user.id)
+      await refreshProfile(user.id);
       setMessage("Perfil Atualizado");
-     
     } catch (err) {
-        console.log(err)
+      console.log(err);
       setError("Erro ao atualizar o perfil");
     }
   }
@@ -109,7 +124,7 @@ function UserEditPage() {
 
                   if (file) {
                     setPfp(URL.createObjectURL(file));
-                    setPfpFile(file)
+                    setPfpFile(file);
                   }
                 }}
                 className="hidden"

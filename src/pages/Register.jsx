@@ -23,8 +23,6 @@ function Register() {
 
     const result = await register(email, password, username)
 
-    console.log(result);
-
     if (!result.sucess) {
       setError(result.message);
       return;
