@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useAuth } from "../context/useAuth";
+import { Eye, EyeOff } from "lucide-react"
 import AuthCard from "../components/AuthCard";
 
 function Login() {
@@ -8,6 +9,7 @@ function Login() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState("")
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
@@ -16,7 +18,7 @@ function Login() {
     e.preventDefault();
 
     if (email === "" || password === "") {
-      setError("Fill in all fields");
+      setError("Preencha todos os campos");
       return;
     }
 
@@ -44,7 +46,7 @@ function Login() {
       )}
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        
+
         <div>
           <label
             htmlFor="email"

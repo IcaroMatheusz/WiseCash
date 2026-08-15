@@ -31,3 +31,12 @@ export async function deleteCategory(categoryId) {
 
     if (error) throw error
 }
+
+export async function updateCategory(categoryId, novoNome) {
+    const { error} = await supabase //atualizando= categoria
+    .from("categories")
+    .update( {nome: novoNome} )
+    .eq("id", categoryId)
+
+    if (error) throw error
+}
