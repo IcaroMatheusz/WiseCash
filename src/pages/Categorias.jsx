@@ -81,8 +81,8 @@ function Categorias() {
   return (
     <>
       <MainLayout title="Categorias">
-        <section className="flex justify-center items-center flex-col">
-          <main className="flex juystify-center items-center flex-col gap-5">
+        <section className="flex justify-center items-center flex-col px-4">
+          <main className="flex juystify-center items-center flex-col gap-5 w-full">
             <p className="text-red-500">{error}</p>
             <p className="text-green-500">{message}</p>
 
@@ -152,6 +152,7 @@ function Categorias() {
             </form>
 
             {categorias.length > 0 ? (
+              <div className="w-full max-w-3xl overflow-x-auto">
               <table className="w-full border-collapse bg-white text-left text-sm text-gray-500 rounded-2xl">
                 <thead className="bg-gray-50 rounded-2xl">
                   <tr>
@@ -214,6 +215,7 @@ function Categorias() {
                   ))}
                 </tbody>
               </table>
+              </div>
             ) : (
               <p className="text-slate-400">Sem categorias ainda...</p>
             )}
