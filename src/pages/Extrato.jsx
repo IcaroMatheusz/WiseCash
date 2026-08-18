@@ -109,14 +109,14 @@ function Extrato() {
         />
       </main>
 
-      <div className="flex justify-center mt-8 px-4 pb-10">
-        <div className="w-full max-w-6xl bg-white rounded-2xl shadow-md p-8">
+      <div className="flex justify-center mt-8 px-4 pb-10 min-w-0">
+        <div className="w-full max-w-6xl min-w-0 bg-white rounded-2xl shadow-md p-4 sm:p-8">
           <h2 className="text-2xl font-bold text-slate-800 mb-6">
             Nova Transação
           </h2>
 
-          <form className="grid grid-cols-1 md:grid-cols-12 gap-5" onSubmit={handleSubmit}>
-            <div className="md:col-span-3">
+          <form className="grid grid-cols-1 lg:grid-cols-12 gap-5" onSubmit={handleSubmit}>
+            <div className="min-w-0 lg:col-span-3">
               <label className="block text-sm font-medium text-gray-600 mb-2">
                 Tipo
               </label>
@@ -146,7 +146,7 @@ function Extrato() {
               </div>
             </div>
 
-            <div className="md:col-span-4">
+            <div className="min-w-0 lg:col-span-4">
               <label className="block text-sm font-medium text-gray-600 mb-2">
                 Categoria
               </label>
@@ -169,7 +169,7 @@ function Extrato() {
               </select>
             </div>
 
-            <div className="md:col-span-5">
+            <div className="min-w-0 lg:col-span-5">
               <label className="block text-sm font-medium text-gray-600 mb-2">
                 Valor
               </label>
@@ -183,7 +183,7 @@ function Extrato() {
               />
             </div>
 
-            <div className="md:col-span-6">
+            <div className="min-w-0 lg:col-span-6">
               <label className="block text-sm font-medium text-gray-600 mb-2">
                 Descrição
               </label>
@@ -197,7 +197,7 @@ function Extrato() {
               />
             </div>
 
-            <div className="md:col-span-6">
+            <div className="min-w-0 lg:col-span-6">
               <label className="block text-sm font-medium text-gray-600 mb-2">
                 Data
               </label>
@@ -210,7 +210,7 @@ function Extrato() {
               />
             </div>
 
-            <div className="col-span-12 flex justify-center mt-2">
+            <div className="lg:col-span-12 flex justify-center mt-2">
               <button className="w-full sm:w-auto bg-slate-800 hover:bg-slate-700 text-white px-12 py-3 rounded-xl font-semibold transition">
                 Adicionar Transação
               </button>
@@ -220,12 +220,12 @@ function Extrato() {
           {error && <p className="mt-4 text-red-600">{error}</p>}
           {message && <p className="mt-4 text-green-600">{message}</p>}
 
-          <section className="mt-8 overflow-x-auto">
+          <section className="mt-8 min-w-0 overflow-x-auto">
             <h2 className="text-2xl font-bold text-slate-800 mb-4">Transações</h2>
             {transactions.length === 0 ? (
               <p className="text-gray-500">Nenhuma transação cadastrada.</p>
             ) : (
-              <table className="w-full text-left text-slate-700">
+              <table className="min-w-[640px] w-full text-left text-slate-700">
                 <thead>
                   <tr className="border-b text-sm text-gray-500">
                     <th className="p-3">Data</th>
