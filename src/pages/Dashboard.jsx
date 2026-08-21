@@ -140,7 +140,7 @@ function Dashboard() {
               </button>
             </form>
 
-            <div className="w-full max-w-5xl px-4 mt-5 mb-5 flex gap-5">
+            <div className="w-full max-w-5xl px-4 mt-5 mb-5 flex flex-wrap gap-5">
               <GraficoDespesasPorCategoria transactions={transactions} userId={user?.id}/>
               <GraficoReceitasDespesas transactions={transactions}/>
               <GraficoReceitasPorCategoria transactions={transactions} userId={user?.id}/>

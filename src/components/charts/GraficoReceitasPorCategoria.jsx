@@ -27,7 +27,7 @@ function GraficoReceitasPorCategoria({ transactions, userId }) {
   if (dados.length === 0) return null
 
   return (
-    <div className="bg-slate-800 rounded-2xl p-6">
+    <div className="bg-slate-800 rounded-2xl p-6 min-w-[280px] flex-1">
       <h3 className="text-white text-xl font-bold mb-4">Receitas por Categoria</h3>
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={dados}>

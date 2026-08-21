@@ -20,7 +20,7 @@ function GraficoReceitasDespesas({ transactions }) {
   if (!dados.some(d => d.value > 0)) return null
 
   return (
-    <div className="bg-slate-800 rounded-2xl p-6">
+    <div className="bg-slate-800 rounded-2xl p-6 min-w-[280px] flex-1">
       <h3 className="text-white text-xl font-bold mb-4">Receitas vs Despesas</h3>
       <PieChart width={300} height={300}>
         <Pie data={dados} cx={150} cy={150} innerRadius={60} outerRadius={100} dataKey="value">
