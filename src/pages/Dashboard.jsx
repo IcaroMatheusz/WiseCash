@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import GraficoReceitasDespesas from "../components/charts/GraficoReceitasDespesas";
 import GraficoDespesasPorCategoria from "../components/charts/GraficoDespesasPorCategoria";
+import GraficoReceitasPorCategoria from "../components/charts/GraficoReceitasPorCategoria";
 
 function Dashboard() {
   const { user, profile } = useAuth();
@@ -139,9 +140,10 @@ function Dashboard() {
               </button>
             </form>
 
-            <div className="w-full max-w-5xl px-4 mt-5">
+            <div className="w-full max-w-5xl px-4 mt-5 mb-5 flex gap-5">
+              <GraficoDespesasPorCategoria transactions={transactions} userId={user?.id}/>
               <GraficoReceitasDespesas transactions={transactions}/>
-              <GraficoDespesasPorCategoria transactions={transactions}/>
+              <GraficoReceitasPorCategoria transactions={transactions} userId={user?.id}/>
             </div>
           </section>
         </main>

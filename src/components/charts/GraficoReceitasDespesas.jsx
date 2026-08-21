@@ -1,6 +1,6 @@
 import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts"
 
-const CORES = ["#4ade80", "#f87171"]
+const CORES = ["#05DF69", "#FF5F5B"]
 
 function GraficoReceitasDespesas({ transactions }) {
   

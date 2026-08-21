@@ -2,7 +2,7 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recha
 import { getCategories } from "../../services/categories"
 import { useState, useEffect } from "react"
 
-function GraficoDespesasPorCategoria({ transactions, userId }) {
+function GraficoReceitasPorCategoria({ transactions, userId }) {
   const [categorias, setCategorias] = useState([])
 
   useEffect(() => {
@@ -14,32 +14,31 @@ function GraficoDespesasPorCategoria({ transactions, userId }) {
     load()
   }, [userId])
 
-  // agrupa despesas por categoria
   const dados = categorias
     .map((cat) => {
       const total = transactions
-        .filter(t => t.category_id === cat.id && t.tipo.toLowerCase() === "despesa")
+        .filter(t => t.category_id === cat.id && t.tipo.toLowerCase() === "receita")
         .reduce((sum, t) => sum + Number(t.valor), 0)
 
       return { name: cat.nome, valor: total }
     })
-    .filter(d => d.valor > 0) // só mostra categorias com gastos
+    .filter(d => d.valor > 0)
 
   if (dados.length === 0) return null
 
   return (
     <div className="bg-slate-800 rounded-2xl p-6">
-      <h3 className="text-white text-xl font-bold mb-4">Despesas por Categoria</h3>
+      <h3 className="text-white text-xl font-bold mb-4">Receitas por Categoria</h3>
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={dados}>
           <XAxis dataKey="name" stroke="#94a3b8" />
           <YAxis stroke="#94a3b8" />
           <Tooltip formatter={(value) => `R$ ${value.toLocaleString("pt-BR")}`} />
-          <Bar dataKey="valor" fill="#FF5F5B" radius={[4, 4, 0, 0]} />
+          <Bar dataKey="valor" fill="#4ade80" radius={[4, 4, 0, 0]} />
         </BarChart>
       </ResponsiveContainer>
     </div>
   )
 }
 
-export default GraficoDespesasPorCategoria
+export default GraficoReceitasPorCategoria
