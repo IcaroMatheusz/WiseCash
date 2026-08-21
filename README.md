@@ -150,6 +150,17 @@ npm run build
 ## 📸 Screenshots
 
 <img width="1916" height="612" alt="image" src="https://github.com/user-attachments/assets/8a0f350d-f007-4b00-93a7-7943021bab04" />
+### Dashboard
+
+<!-- Adicione aqui uma imagem do Dashboard -->
+
+### Extrato
+
+<!-- Adicione aqui uma imagem do Extrato -->
+
+### Categorias
+
+<!-- Adicione aqui uma imagem da página de Categorias -->
 
 ---
 

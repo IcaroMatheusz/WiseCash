@@ -10,6 +10,8 @@ import {
   CircleArrowUpIcon,
   CircleArrowDownIcon,
 } from "lucide-react";
+import GraficoReceitasDespesas from "../components/charts/GraficoReceitasDespesas";
+import GraficoDespesasPorCategoria from "../components/charts/GraficoDespesasPorCategoria";
 
 function Dashboard() {
   const { user, profile } = useAuth();
@@ -95,7 +97,7 @@ function Dashboard() {
             />
           </section>
 
-          <section className="flex justify-center items-center">
+          <section className="flex justify-center items-center flex-col">
             <form
               onSubmit={adicionarRenda}
               className="w-full max-w-sm bg-white p-8 rounded-2xl shadow-md flex items-center flex-col gap-4 border border-gray-100"
@@ -136,6 +138,11 @@ function Dashboard() {
                 Adicionar Renda Mensal
               </button>
             </form>
+
+            <div className="w-full max-w-5xl px-4 mt-5">
+              <GraficoReceitasDespesas transactions={transactions}/>
+              <GraficoDespesasPorCategoria transactions={transactions}/>
+            </div>
           </section>
         </main>
       </MainLayout>
